@@ -12,6 +12,7 @@ import util.camera.Camera;
 import util.math.FastMath;
 import util.math.Matrix4f;
 import util.math.Vector3f;
+import util.math.Vector4f;
 import util.projection.Projection;
 
 public class Main {
@@ -19,7 +20,7 @@ public class Main {
     // Creates a new cube
     //private final CubeGL graphicObject = new CubeGL();
     //Creates a new Piramide
-    private final PiramideGL graphicObject = new PiramideGL();
+    private final SurfaceGL graphicObject = new SurfaceGL(1, 2, -1, 2, 1, 2, 300);
 
     // Animation:
     private float currentAngleX = 0.0f;
@@ -56,189 +57,192 @@ public class Main {
     private final Matrix4f viewMatrix = new Matrix4f();
     private final Matrix4f projMatrix = new Matrix4f();
 
-    private void drawTetrahedron(Surface surface, Vector3f[] v, float isolevel) {
-        char index = 0;
-    for (int i = 0; i < 4; ++i)
-        if (v[i].value < isolevel)
-            index |= (1 << i);
+//    private void drawTetrahedron(Surface surface, Vector3f[] v, float isolevel) {
+//        char index = (char)0;
+//    for (int i = 0; i < 4; ++i)
+//        if (v[i].value < isolevel)
+//            index |= (1 << i);
+//
+//    switch ((int)index) {
+//
+//        // we don't do anything if everyone is inside or outside
+//        case 0x00:
+//        case 0x0F:
+//            break;
+//
+//        // only vert 0 is inside
+//        case 0x01:
+//            drawVert(surface, v[0], v[1], isolevel);
+//            drawVert(surface, v[0], v[3], isolevel);
+//            drawVert(surface, v[0], v[2], isolevel);
+//            break;
+//
+//        // only vert 1 is inside
+//        case 0x02:
+//            drawVert(surface, v[1], v[0], isolevel);
+//            drawVert(surface, v[1], v[2], isolevel);
+//            drawVert(surface, v[1], v[3], isolevel);
+//            break;
+//
+//        // only vert 2 is inside
+//        case 0x04:
+//            drawVert(surface, v[2], v[0], isolevel);
+//            drawVert(surface, v[2], v[3], isolevel);
+//            drawVert(surface, v[2], v[1], isolevel);
+//            break;
+//
+//        // only vert 3 is inside
+//        case 0x08:
+//            drawVert(surface, v[3], v[1], isolevel);
+//            drawVert(surface, v[3], v[2], isolevel);
+//            drawVert(surface, v[3], v[0], isolevel);
+//            break;
+//
+//        // verts 0, 1 are inside
+//        case 0x03:
+//            drawVert(surface, v[3], v[0], isolevel);
+//            drawVert(surface, v[2], v[0], isolevel);
+//            drawVert(surface, v[1], v[3], isolevel);
+//
+//            drawVert(surface, v[2], v[0], isolevel);
+//            drawVert(surface, v[2], v[1], isolevel);
+//            drawVert(surface, v[1], v[3], isolevel);
+//            break;
+//
+//        // verts 0, 2 are inside
+//        case 0x05:
+//            drawVert(surface, v[3], v[0], isolevel);
+//            drawVert(surface, v[1], v[2], isolevel);
+//            drawVert(surface, v[1], v[0], isolevel);
+//
+//            drawVert(surface, v[1], v[2], isolevel);
+//            drawVert(surface, v[3], v[0], isolevel);
+//            drawVert(surface, v[2], v[3], isolevel);
+//            break;
+//
+//        // verts 0, 3 are inside
+//        case 0x09:
+//            drawVert(surface, v[0], v[1], isolevel);
+//            drawVert(surface, v[1], v[3], isolevel);
+//            drawVert(surface, v[0], v[2], isolevel);
+//
+//            drawVert(surface, v[1], v[3], isolevel);
+//            drawVert(surface, v[3], v[2], isolevel);
+//            drawVert(surface, v[0], v[2], isolevel);
+//            break;
+//
+//        // verts 1, 2 are inside
+//        case 0x06:
+//            drawVert(surface, v[0], v[1], isolevel);
+//            drawVert(surface, v[0], v[2], isolevel);
+//            drawVert(surface, v[1], v[3], isolevel);
+//
+//            drawVert(surface, v[1], v[3], isolevel);
+//            drawVert(surface, v[0], v[2], isolevel);
+//            drawVert(surface, v[3], v[2], isolevel);
+//            break;
+//
+//        // verts 2, 3 are inside
+//        case 0x0C:
+//            drawVert(surface, v[1], v[3], isolevel);
+//            drawVert(surface, v[2], v[0], isolevel);
+//            drawVert(surface, v[3], v[0], isolevel);
+//
+//            drawVert(surface, v[2], v[0], isolevel);
+//            drawVert(surface, v[1], v[3], isolevel);
+//            drawVert(surface, v[2], v[1], isolevel);
+//            break;
+//
+//        // verts 1, 3 are inside
+//        case 0x0A:
+//            drawVert(surface, v[3], v[0], isolevel);
+//            drawVert(surface, v[1], v[0], isolevel);
+//            drawVert(surface, v[1], v[2], isolevel);
+//
+//            drawVert(surface, v[1], v[2], isolevel);
+//            drawVert(surface, v[2], v[3], isolevel);
+//            drawVert(surface, v[3], v[0], isolevel);
+//            break;
+//
+//        // verts 0, 1, 2 are inside
+//        case 0x07:
+//            drawVert(surface, v[3], v[0], isolevel);
+//            drawVert(surface, v[3], v[2], isolevel);
+//            drawVert(surface, v[3], v[1], isolevel);
+//            break;
+//
+//        // verts 0, 1, 3 are inside
+//        case 0x0B:
+//            drawVert(surface, v[2], v[1], isolevel);
+//            drawVert(surface, v[2], v[3], isolevel);
+//            drawVert(surface, v[2], v[0], isolevel);
+//            break;
+//
+//        // verts 0, 2, 3 are inside
+//        case 0x0D:
+//            drawVert(surface, v[1], v[0], isolevel);
+//            drawVert(surface, v[1], v[3], isolevel);
+//            drawVert(surface, v[1], v[2], isolevel);
+//            break;
+//
+//        // verts 1, 2, 3 are inside
+//        case 0x0E:
+//            drawVert(surface, v[0], v[1], isolevel);
+//            drawVert(surface, v[0], v[2], isolevel);
+//            drawVert(surface, v[0], v[3], isolevel);
+//            break;
+//
+//        // what is this I don't even
+//        default:
+//            assert(false);
+//    }
+//
+//    }
 
-    switch (index) {
-
-        // we don't do anything if everyone is inside or outside
-        case 0x00:
-        case 0x0F:
-            break;
-
-        // only vert 0 is inside
-        case 0x01:
-            drawVert(surface, v[0], v[1], isolevel);
-            drawVert(surface, v[0], v[3], isolevel);
-            drawVert(surface, v[0], v[2], isolevel);
-            break;
-
-        // only vert 1 is inside
-        case 0x02:
-            drawVert(surface, v[1], v[0], isolevel);
-            drawVert(surface, v[1], v[2], isolevel);
-            drawVert(surface, v[1], v[3], isolevel);
-            break;
-
-        // only vert 2 is inside
-        case 0x04:
-            drawVert(surface, v[2], v[0], isolevel);
-            drawVert(surface, v[2], v[3], isolevel);
-            drawVert(surface, v[2], v[1], isolevel);
-            break;
-
-        // only vert 3 is inside
-        case 0x08:
-            drawVert(surface, v[3], v[1], isolevel);
-            drawVert(surface, v[3], v[2], isolevel);
-            drawVert(surface, v[3], v[0], isolevel);
-            break;
-
-        // verts 0, 1 are inside
-        case 0x03:
-            drawVert(surface, v[3], v[0], isolevel);
-            drawVert(surface, v[2], v[0], isolevel);
-            drawVert(surface, v[1], v[3], isolevel);
-
-            drawVert(surface, v[2], v[0], isolevel);
-            drawVert(surface, v[2], v[1], isolevel);
-            drawVert(surface, v[1], v[3], isolevel);
-            break;
-
-        // verts 0, 2 are inside
-        case 0x05:
-            drawVert(surface, v[3], v[0], isolevel);
-            drawVert(surface, v[1], v[2], isolevel);
-            drawVert(surface, v[1], v[0], isolevel);
-
-            drawVert(surface, v[1], v[2], isolevel);
-            drawVert(surface, v[3], v[0], isolevel);
-            drawVert(surface, v[2], v[3], isolevel);
-            break;
-
-        // verts 0, 3 are inside
-        case 0x09:
-            drawVert(surface, v[0], v[1], isolevel);
-            drawVert(surface, v[1], v[3], isolevel);
-            drawVert(surface, v[0], v[2], isolevel);
-
-            drawVert(surface, v[1], v[3], isolevel);
-            drawVert(surface, v[3], v[2], isolevel);
-            drawVert(surface, v[0], v[2], isolevel);
-            break;
-
-        // verts 1, 2 are inside
-        case 0x06:
-            drawVert(surface, v[0], v[1], isolevel);
-            drawVert(surface, v[0], v[2], isolevel);
-            drawVert(surface, v[1], v[3], isolevel);
-
-            drawVert(surface, v[1], v[3], isolevel);
-            drawVert(surface, v[0], v[2], isolevel);
-            drawVert(surface, v[3], v[2], isolevel);
-            break;
-
-        // verts 2, 3 are inside
-        case 0x0C:
-            drawVert(surface, v[1], v[3], isolevel);
-            drawVert(surface, v[2], v[0], isolevel);
-            drawVert(surface, v[3], v[0], isolevel);
-
-            drawVert(surface, v[2], v[0], isolevel);
-            drawVert(surface, v[1], v[3], isolevel);
-            drawVert(surface, v[2], v[1], isolevel);
-            break;
-
-        // verts 1, 3 are inside
-        case 0x0A:
-            drawVert(surface, v[3], v[0], isolevel);
-            drawVert(surface, v[1], v[0], isolevel);
-            drawVert(surface, v[1], v[2], isolevel);
-
-            drawVert(surface, v[1], v[2], isolevel);
-            drawVert(surface, v[2], v[3], isolevel);
-            drawVert(surface, v[3], v[0], isolevel);
-            break;
-
-        // verts 0, 1, 2 are inside
-        case 0x07:
-            drawVert(surface, v[3], v[0], isolevel);
-            drawVert(surface, v[3], v[2], isolevel);
-            drawVert(surface, v[3], v[1], isolevel);
-            break;
-
-        // verts 0, 1, 3 are inside
-        case 0x0B:
-            drawVert(surface, v[2], v[1], isolevel);
-            drawVert(surface, v[2], v[3], isolevel);
-            drawVert(surface, v[2], v[0], isolevel);
-            break;
-
-        // verts 0, 2, 3 are inside
-        case 0x0D:
-            drawVert(surface, v[1], v[0], isolevel);
-            drawVert(surface, v[1], v[3], isolevel);
-            drawVert(surface, v[1], v[2], isolevel);
-            break;
-
-        // verts 1, 2, 3 are inside
-        case 0x0E:
-            drawVert(surface, v[0], v[1], isolevel);
-            drawVert(surface, v[0], v[2], isolevel);
-            drawVert(surface, v[0], v[3], isolevel);
-            break;
-
-        // what is this I don't even
-        default:
-            assert(false);
-    }
-
-    }
-
-    private void drawVert(Surface surface, Vector3f p1, Vector3f p2, float isolevel) {
-        float v1 = p1.value;
-    float v2 = p2.value;
-
-    float x, y, z;
-
-    if (v2 == v1) {
-        x = (p1.x + p2.x) / 2.0f;
-        y = (p1.y + p2.y) / 2.0f;
-        z = (p1.z + p2.z) / 2.0f;
-    } else {
-
-        /*
-
-         <----+-----+---+----->
-              v1    |   v2
-                 isolevel
-
-
-         <----+-----+---+----->
-              0     |   1
-                  interp
-
-         */
-
-
-        // interp == 0: vert should be at p1
-        // interp == 1: vert should be at p2
-        float interp = (isolevel - v1) / (v2 - v1);
-        float oneMinusInterp = 1 - interp;
-
-        x = p1.x * oneMinusInterp + p2.x * interp;
-        y = p1.y * oneMinusInterp + p2.y * interp;
-        z = p1.z * oneMinusInterp + p2.z * interp;
-    }
-
-    Vector3f normal = surface.gradientAt(x, y, z);
-
-    //glNormal3f(normal.x, normal.y, normal.z);
-    //glVertex3f(x, y, z);
-    }
+//    private void drawVert(Surface surface, Vector3f p1, Vector3f p2, float isolevel) {
+//        float v1 = p1.value;
+//        float v2 = p2.value;
+//
+//        float x, y, z;
+//
+//        if (v2 == v1) {
+//            x = (p1.x + p2.x) / 2.0f;
+//            y = (p1.y + p2.y) / 2.0f;
+//            z = (p1.z + p2.z) / 2.0f;
+//        } else {
+//
+//        /*
+//
+//         <----+-----+---+----->
+//              v1    |   v2
+//                 isolevel
+//
+//
+//         <----+-----+---+----->
+//              0     |   1
+//                  interp
+//
+//         */
+//
+//
+//        // interp == 0: vert should be at p1
+//        // interp == 1: vert should be at p2
+//        float interp = (isolevel - v1) / (v2 - v1);
+//        float oneMinusInterp = 1 - interp;
+//
+//        x = p1.x * oneMinusInterp + p2.x * interp;
+//        y = p1.y * oneMinusInterp + p2.y * interp;
+//        z = p1.z * oneMinusInterp + p2.z * interp;
+//        surface.positions.add(new Vector4f(x, y, z, 1));
+//        surface.nfaces++;
+//        surface.nverts++;
+//    }
+//
+//    //Vector3f normal = surface.gradientAt(x, y, z);
+//
+//    //glNormal3f(normal.x, normal.y, normal.z);
+//    //glVertex3f(x, y, z);
+//    }
 
     public enum RotationType {
         X, Y, Z
@@ -252,82 +256,90 @@ public class Main {
     private ProjectionType currentProjection = ProjectionType.P;
 
     
-    public void createCubes(Surface surface, float isolevel, long resolution, float xMin, float xMax, float yMin, float yMax, float zMin, float zMax){
-        
-        float xrange = xMax - xMin;
-        float yrange = yMax - yMin;
-        float zrange = zMax - zMin;
-        
-        long pointRes = resolution + 1;
-        
-        Vector3f grid = new Vector3f(pointRes, pointRes, pointRes);
-        
-        for (long i = 0; i <= resolution; ++i) {
-        float x = (float)i/resolution * xrange + xMin;
-        for (long j = 0; j <= resolution; ++j) {
-            float y = (float)j/resolution * yrange + yMin;
-            for (long k = 0; k <= resolution; ++k) {
-                float z = (float)k/resolution * zrange + zMin;
-                float value = surface.calculatePoints(x, y, z);
-                grid.setTo(i, j, k, value);
-            }
-        }
-    }
-        
-        for (long i = 0; i < resolution; ++i) {
-            float x1 = (float)i/resolution * xrange + xMin;
-            float x2 = (float)(i+1)/resolution * xrange + xMin;
-            for (long j = 0; j < resolution; ++j) {
-                float y1 = (float)j/resolution * yrange + yMin;
-                float y2 = (float)(j+1)/resolution * yrange + yMin;
-                for (long k = 0; k < resolution; ++k) {
-                    float z1 = (float)k/resolution * zrange + zMin;
-                    float z2 = (float)(k+1)/resolution * zrange + zMin;
-                    
-                    
-                    Vector3f[] v = new Vector3f[8];
-                    v[0] = new Vector3f(x1, y1, z1);
-                    v[1] = new Vector3f(x2, y1, z1);
-                    v[2] = new Vector3f(x2, y2, z1);
-                    v[3] = new Vector3f(x1, y2, z1);
-                    v[4] = new Vector3f(x1, y1, z2);
-                    v[5] = new Vector3f(x2, y1, z2);
-                    v[6] = new Vector3f(x2, y2, z2);
-                    v[7] = new Vector3f(x1, y2, z2);
-                    //{
-                    //{x1, y1, z1, grid.get(i,     j,     k    )},
-                    //{x2, y1, z1, grid.get(i + 1, j,     k    )},
-                    //{x2, y2, z1, grid.get(i + 1, j + 1, k    )},
-                    //{x1, y2, z1, grid.get(i,     j + 1, k    )},
-                    //{x1, y1, z2, grid.get(i,     j,     k + 1)},
-                    //{x2, y1, z2, grid.get(i + 1, j,     k + 1)},
-                    //{x2, y2, z2, grid.get(i + 1, j + 1, k + 1)},
-                    //{x1, y2, z2, grid.get(i,     j + 1, k + 1)}
-                    //};
-
-                Vector3f[][] tetrahedra = new Vector3f[6][4];
-                tetrahedra[0][1] = v[0]; tetrahedra[0][2] = v[7]; tetrahedra[0][3] = v[3]; tetrahedra[0][4] = v[2];
-                tetrahedra[1][1] = v[0]; tetrahedra[1][2] = v[7]; tetrahedra[1][3] = v[2]; tetrahedra[1][4] = v[6];
-                tetrahedra[2][1] = v[0]; tetrahedra[2][2] = v[4]; tetrahedra[2][3] = v[7]; tetrahedra[2][4] = v[6];
-                tetrahedra[3][1] = v[0]; tetrahedra[3][2] = v[1]; tetrahedra[3][3] = v[6]; tetrahedra[3][4] = v[2];
-                tetrahedra[4][1] = v[0]; tetrahedra[4][2] = v[4]; tetrahedra[4][3] = v[6]; tetrahedra[4][4] = v[1];
-                tetrahedra[5][1] = v[5]; tetrahedra[5][2] = v[1]; tetrahedra[5][3] = v[6]; tetrahedra[5][4] = v[4];
-                        //= {
-                    //{ v[0], v[7], v[3], v[2] },
-                    //{ v[0], v[7], v[2], v[6] },
-                    //{ v[0], v[4], v[7], v[6] },
-                    //{ v[0], v[1], v[6], v[2] },
-                    //{ v[0], v[4], v[6], v[1] },
-                    //{ v[5], v[1], v[6], v[4] }
-                //};
-                
-                for (int t = 0; t < 6; ++t)
-                    drawTetrahedron(surface, tetrahedra[t], isolevel);
-                    
-                }
-            }
-        }
-    }
+//    public void createCubes(Surface surface, float isolevel, long resolution, float xMin, float xMax, float yMin, float yMax, float zMin, float zMax){
+//        
+//        float xrange = xMax - xMin;
+//        float yrange = yMax - yMin;
+//        float zrange = zMax - zMin;
+//        
+//        long pointRes = resolution + 1;
+//        
+//        Vector3f grid = new Vector3f(pointRes, pointRes, pointRes);
+//        
+////        for (long i = 0; i <= resolution; ++i) {
+////            float x = (float)i/resolution * xrange + xMin;
+////            for (long j = 0; j <= resolution; ++j) {
+////                float y = (float)j/resolution * yrange + yMin;
+////                for (long k = 0; k <= resolution; ++k) {
+////                    float z = (float)k/resolution * zrange + zMin;
+////                    float value = surface.calculatePoints(x, y, z);
+////                    grid.setTo(i, j, k, value);
+////                }
+////            }
+////        }
+//        
+//        for (long i = 0; i < resolution; ++i) {
+//            float x1 = (float)i/resolution * xrange + xMin;
+//            float x2 = (float)(i+1)/resolution * xrange + xMin;
+//            for (long j = 0; j < resolution; ++j) {
+//                float y1 = (float)j/resolution * yrange + yMin;
+//                float y2 = (float)(j+1)/resolution * yrange + yMin;
+//                for (long k = 0; k < resolution; ++k) {
+//                    float z1 = (float)k/resolution * zrange + zMin;
+//                    float z2 = (float)(k+1)/resolution * zrange + zMin;
+//                    
+//                    
+//                    Vector3f[] v = new Vector3f[8];
+//                    v[0] = new Vector3f(x1, y1, z1);
+//                    v[0].value = surface.calculatePoints(x1, y1, z1);
+//                    v[1] = new Vector3f(x2, y1, z1);
+//                    v[1].value = surface.calculatePoints(x2, y1, z1);
+//                    v[2] = new Vector3f(x2, y2, z1);
+//                    v[2].value = surface.calculatePoints(x2, y2, z1);
+//                    v[3] = new Vector3f(x1, y2, z1);
+//                    v[3].value = surface.calculatePoints(x1, y2, z1);
+//                    v[4] = new Vector3f(x1, y1, z2);
+//                    v[4].value = surface.calculatePoints(x1, y1, z2);
+//                    v[5] = new Vector3f(x2, y1, z2);
+//                    v[5].value = surface.calculatePoints(x2, y1, z2);
+//                    v[6] = new Vector3f(x2, y2, z2);
+//                    v[6].value = surface.calculatePoints(x2, y2, z2);
+//                    v[7] = new Vector3f(x1, y2, z2);
+//                    v[7].value = surface.calculatePoints(x1, y2, z2);
+//                    //{
+//                    //{x1, y1, z1, grid.get(i,     j,     k    )},
+//                    //{x2, y1, z1, grid.get(i + 1, j,     k    )},
+//                    //{x2, y2, z1, grid.get(i + 1, j + 1, k    )},
+//                    //{x1, y2, z1, grid.get(i,     j + 1, k    )},
+//                    //{x1, y1, z2, grid.get(i,     j,     k + 1)},
+//                    //{x2, y1, z2, grid.get(i + 1, j,     k + 1)},
+//                    //{x2, y2, z2, grid.get(i + 1, j + 1, k + 1)},
+//                    //{x1, y2, z2, grid.get(i,     j + 1, k + 1)}
+//                    //};
+//
+//                Vector3f[][] tetrahedra = new Vector3f[6][4];
+//                tetrahedra[0][0] = v[0]; tetrahedra[0][1] = v[7]; tetrahedra[0][2] = v[3]; tetrahedra[0][3] = v[2];
+//                tetrahedra[1][0] = v[0]; tetrahedra[1][1] = v[7]; tetrahedra[1][2] = v[2]; tetrahedra[1][3] = v[6];
+//                tetrahedra[2][0] = v[0]; tetrahedra[2][1] = v[4]; tetrahedra[2][2] = v[7]; tetrahedra[2][3] = v[6];
+//                tetrahedra[3][0] = v[0]; tetrahedra[3][1] = v[1]; tetrahedra[3][2] = v[6]; tetrahedra[3][3] = v[2];
+//                tetrahedra[4][0] = v[0]; tetrahedra[4][1] = v[4]; tetrahedra[4][2] = v[6]; tetrahedra[4][3] = v[1];
+//                tetrahedra[5][0] = v[5]; tetrahedra[5][1] = v[1]; tetrahedra[5][2] = v[6]; tetrahedra[5][3] = v[4];
+//                        //= {
+//                    //{ v[0], v[7], v[3], v[2] },
+//                    //{ v[0], v[7], v[2], v[6] },
+//                    //{ v[0], v[4], v[7], v[6] },
+//                    //{ v[0], v[1], v[6], v[2] },
+//                    //{ v[0], v[4], v[6], v[1] },
+//                    //{ v[5], v[1], v[6], v[4] }
+//                //};
+//                
+//                for (int t = 0; t < 6; ++t)
+//                    //drawTetrahedron(surface, tetrahedra[t], isolevel);
+//                    
+//                }
+//            }
+//        }
+//    }
     
     
     
@@ -359,6 +371,7 @@ public class Main {
         // Standard OpenGL Version
         System.out.println("OpenGL version: " + GL11.glGetString(GL11.GL_VERSION));
         System.out.println("GLSL version: " + GL11.glGetString(GL20.GL_SHADING_LANGUAGE_VERSION));
+        System.out.println("surface " + graphicObject.calculatePoints(0.2f, 0.2f, 0));
 
         // initialize basic OpenGL stuff
         GL11.glViewport(0, 0, width, height);
@@ -368,6 +381,7 @@ public class Main {
     public void run() {
         // Creates the vertex array object. 
         // Must be performed before shaders compilation.
+        //createCubes(graphicObject, graphicObject.G, graphicObject.resolution, -1, 1, -1, 1, -1, 1);
         graphicObject.fillVAOs();
         graphicObject.loadShaders();
 
@@ -545,6 +559,7 @@ public class Main {
      */
     public static void main(String[] args) throws LWJGLException {
         Main example = new Main();
+        
         example.initGl();
         example.run();
     }

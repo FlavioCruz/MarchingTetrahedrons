@@ -20,12 +20,13 @@ public class Main {
     // Creates a new cube
     //private final CubeGL graphicObject = new CubeGL();
     //Creates a new Piramide
-    private final SurfaceGL graphicObject = new SurfaceGL(1, 2, -1, 2, 1, 2, 300);
+    private final SurfaceGL graphicObject = new SurfaceGL(1, 2, -1, 2, 1, 2, 100);
 
     // Animation:
     private float currentAngleX = 0.0f;
     private float currentAngleY = 0.0f;
     private float currentAngle = 0.0f;
+    int pj = 1;
 
     // Projection Matrix
     private final Projection proj = new Projection(45, -1.3333f, 0.0f, 100f);
@@ -39,15 +40,15 @@ public class Main {
     private final Camera cam = new Camera(eye, at, up);
 
     // Light
-    private final Vector3f lightPos = new Vector3f(0.0f, 2.0f, -2.0f);
+    private final Vector3f lightPos = new Vector3f(0.0f, 2.0f, 3.0f);
     private final Vector3f ambientColor = new Vector3f(1.0f, 1.0f, 1.0f);
     private final Vector3f diffuseColor = new Vector3f(1.0f, 1.0f, 1.0f);
     private final Vector3f speclarColor = new Vector3f(1.0f, 1.0f, 1.0f);
 
-    private final float kA = 0.4f;
-    private final float kD = 0.5f;
-    private final float kS = 0.1f;
-    private final float sN = 60.0f;
+    private final float kA = 0.3f;
+    private final float kD = 1.5f;
+    private final float kS = 100.1f;
+    private final float sN = 6.0f;
 
     // Model Matrix:
     private final Matrix4f scaleMatrix = new Matrix4f();
@@ -186,21 +187,27 @@ public class Main {
                 currentAngleX -=0.01f;
                 currentRotation = RotationType.X;
         }
+        
         if(Keyboard.next()){
             if (Keyboard.getEventKeyState()) {
                 int input = Keyboard.getEventKey();
                 switch (input) {
                     case Keyboard.KEY_O:
-                        currentProjection = ProjectionType.O;
+                        if(pj == 1)
+                            currentProjection = ProjectionType.O;
+                        else
+                            currentProjection = ProjectionType.P;
+                        pj *= -1;
+                        
                         break;
-                    case Keyboard.KEY_P:
-                        currentProjection = ProjectionType.P;
-                        break;
+//                    case Keyboard.KEY_P:
+//                        currentProjection = ProjectionType.P;
+//                        break;
                 }
             }
         }
         
-        currentAngle = currentAngleX + currentAngleY;
+        //currentAngle = currentAngleX + currentAngleY;
         
     }
 
@@ -218,8 +225,8 @@ public class Main {
 
     private Matrix4f getRotationMatrixX(float angle) {
 
-        float c = FastMath.cos(currentAngle);
-        float s = FastMath.sin(currentAngle);
+        float c = FastMath.cos(currentAngleX);
+        float s = FastMath.sin(currentAngleX);
 
         Matrix4f rotationMatrixX = new Matrix4f();
 
@@ -234,8 +241,8 @@ public class Main {
 
     private Matrix4f getRotationMatrixY(float angle) {
 
-        float c = FastMath.cos(currentAngle);
-        float s = FastMath.sin(currentAngle);
+        float c = FastMath.cos(currentAngleY);
+        float s = FastMath.sin(currentAngleY);
 
         Matrix4f rotationMatrixY = new Matrix4f();
 
@@ -252,17 +259,10 @@ public class Main {
         Matrix4f matrix = new Matrix4f();
         matrix.setToIdentity();
         Matrix4f rotationMatrix;
-
-        switch (currentRotation) {
-            case X:
-                rotationMatrix = getRotationMatrixX(currentAngle);
-                break;
-            case Y:
-                rotationMatrix = getRotationMatrixY(currentAngle);
-                break;
-            default:
-                rotationMatrix = getRotationMatrixX(currentAngle);
-        }
+        rotationMatrix = getRotationMatrixX(currentAngleX);
+        matrix.multiply(rotationMatrix);
+        rotationMatrix = getRotationMatrixY(currentAngleY);
+        matrix.multiply(rotationMatrix);
         matrix.multiply(rotationMatrix);
         return matrix;
     }

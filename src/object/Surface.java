@@ -317,6 +317,17 @@ public class Surface {
                 colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
+                
+                drawVert(surface, v[2], v[0], isolevel);
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
+                countV++;
+                drawVert(surface, v[2], v[3], isolevel);
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
+                countV++;
+                drawVert(surface, v[2], v[1], isolevel);
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
+                countV++;
+                countF++;
                 break;
 
             // verts 0, 2, 3 are inside
@@ -331,6 +342,17 @@ public class Surface {
                 colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
+                
+                drawVert(surface, v[1], v[2], isolevel);
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
+                countV++;
+                drawVert(surface, v[1], v[3], isolevel);
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
+                countV++;
+                drawVert(surface, v[1], v[0], isolevel);
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
+                countV++;
+                countF++;
                 break;
 
             // verts 1, 2, 3 are inside
@@ -342,6 +364,17 @@ public class Surface {
                 colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[0], v[3], isolevel);
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
+                countV++;
+                countF++;
+                
+                drawVert(surface, v[0], v[3], isolevel);
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
+                countV++;
+                drawVert(surface, v[0], v[2], isolevel);
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
+                countV++;
+                drawVert(surface, v[0], v[1], isolevel);
                 colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;

@@ -11,16 +11,13 @@ uniform mat4 projection;
 
 //light parameters
 uniform vec3 lightPos;
-uniform vec3 ambientColor;
+uniform vec3 ambientColor; 
 uniform vec3 diffuseColor;
 uniform vec3 speclarColor;
 uniform float kA, kD, kS, sN;
 
-//ilumination variables dor frag shader
+//vertex color
 smooth out vec4 theColor;
-smooth out vec4 newNormal;
-smooth out vec3 lightDir;
-smooth out vec3 v;
 
 void main()
 {
@@ -31,10 +28,18 @@ void main()
     gl_Position = projection * modelView * position;
 
     vec4 positionWorld = modelmatrix * position;
-    lightDir = normalize(lightPos - positionWorld.xyz);
-    newNormal = normalize(normalMatrix * normal);
+    vec4 newNormal = normalize(normalMatrix * normal);
+
+    //diffuse
+    vec3 lightDir = normalize(lightPos - positionWorld.xyz);
+    float iD = max(0.0, dot(lightDir, newNormal.xyz));
 
     //specular
-    v  = -normalize((modelView * position).xyz);
-    theColor = color;
+    vec3  v  = -normalize((modelView * position).xyz);
+    vec3  h  =  normalize(lightDir + v);
+    float iS =  pow(max(0.0, dot(newNormal.xyz, h)), sN);
+
+    vec3 lightFactor = kA * ambientColor + kD * iD * diffuseColor + kS * iS * speclarColor;
+
+    theColor = vec4(color.rgb * lightFactor, color.a);
 }

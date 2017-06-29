@@ -156,22 +156,12 @@ public class SurfaceGL extends Surface implements ObjectGL{
     @Override
     public void fillVBOs() {
         // convert vertex array to buffer
-        long lim = (nfaces) * nfaces * nfaces;
         positionBuffer = BufferUtils.createFloatBuffer(4 * 3 * nverts/3); //4(coordinates)*3(vertices)*12(triangles)
         
         // convert vertex array to buffer
         normalBuffer = BufferUtils.createFloatBuffer(4 * 3 * nverts/3); //4(coordinates)*3(vertices)*12(triangles)
         // convert color array to buffer
         colorBuffer = BufferUtils.createFloatBuffer(4 * 3 * nverts/3); //4(coordinates)*3(vertices)*12(triangles)
-        
-
-        // bluid the quad faces 
-//        buildQuad(1, 0, 3, 2);
-//        buildQuad(2, 3, 7, 6);
-//        buildQuad(3, 0, 4, 7);
-//        buildQuad(6, 5, 1, 2);
-//        buildQuad(4, 5, 6, 7);
-//        buildQuad(5, 4, 0, 1);
         
         for (int i = 0; i < positions.size(); i++) {
             positions.get(i).store(positionBuffer);
@@ -182,35 +172,5 @@ public class SurfaceGL extends Surface implements ObjectGL{
         positionBuffer.flip();
         normalBuffer.flip();
         colorBuffer.flip();
-    }
-
-    // private methods
-
-    private void buildQuad(int a, int b, int c, int d) {
-        positions.get(a).store(positionBuffer);
-        positions.get(c).store(positionBuffer);
-        positions.get(b).store(positionBuffer);
-
-        positions.get(a).store(positionBuffer);
-        positions.get(d).store(positionBuffer);
-        positions.get(c).store(positionBuffer);
-        
-                
-        positions.get(a).store(normalBuffer);
-        positions.get(c).store(normalBuffer);
-        positions.get(b).store(normalBuffer);
-
-        positions.get(a).store(normalBuffer);
-        positions.get(d).store(normalBuffer);
-        positions.get(c).store(normalBuffer);
-        
-        
-        colors.get(a).store(colorBuffer);
-        colors.get(c).store(colorBuffer);
-        colors.get(b).store(colorBuffer);
-
-        colors.get(a).store(colorBuffer);
-        colors.get(d).store(colorBuffer);
-        colors.get(c).store(colorBuffer);
     }
 }

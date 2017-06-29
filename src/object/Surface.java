@@ -29,22 +29,9 @@ public class Surface {
         System.out.println(t);
 
         Vector3f v0 = new Vector3f(-1.0f, -1.0f, -1.0f);
-        /*Vertice v1 = new Vertice(v0.x, v0.y, v0.z + tCubo);
-        Vertice v2 = new Vertice(v0.x + tCubo, v0.y, v0.z + tCubo);
-        Vertice v3 = new Vertice(v0.x + tCubo, v0.y, v0.z);
-        Vertice v4 = new Vertice(v0.x, v0.y + tCubo, v0.z);
-        Vertice v5 = new Vertice(v0.x, v0.y + tCubo, v0.z);
-        Vertice v6 = new Vertice(v0.x + tCubo, v0.y + tCubo, v0.z + tCubo);
-        Vertice v7 = new Vertice(v0.x + tCubo, v0.y + tCubo, v0.z);*/
 
-        Cube marchante = new Cube();
-
-        /*for (int i = 0; i < 6; i++) {
-            if (processa(a, b, c, d, e, f, marchante.tetraedros[i])) {
-                nverts += 3;
-                nfaces++;
-            }
-        }*/
+        Cube marching = new Cube();
+        
         for (int i = 0; i < resolution; i++) {
             float varX = i * t;
             for (int j = 0; j < resolution; j++) {
@@ -57,25 +44,21 @@ public class Surface {
                     Vector3f v2 = new Vector3f(v.x + t, v.y, v.z + t);
                     Vector3f v3 = new Vector3f(v.x + t, v.y, v.z);
                     Vector3f v4 = new Vector3f(v.x, v.y + t, v.z);
-                    Vector3f v5 = new Vector3f(v.x, v.y + t, v.z);
+                    Vector3f v5 = new Vector3f(v.x, v.y + t, v.z + t);
                     Vector3f v6 = new Vector3f(v.x + t, v.y + t, v.z + t);
                     Vector3f v7 = new Vector3f(v.x + t, v.y + t, v.z);
 
-                    marchante.setVertex(v, v1, v2, v3, v4, v5, v6, v7);
+                    marching.setVertex(v, v1, v2, v3, v4, v5, v6, v7);
 
                     for (int l = 0; l < 6; l++) {
-                        /*if (*/processa(a, b, c, d, e, f, G, marchante.tetraedros[l]);/*) {*/
-//                            nverts += 3;
-//                            nfaces++;
-//                        }
+                        geraPontos(a, b, c, d, e, f, G, marching.tetraedros[l]);
                     }
                 }
             }
         }
     }
     
-    public void processa(float a, float b, float c, float d, float e, float f, float isolevel, Tetrahedra t) {
-        boolean relevante = false;
+    public void geraPontos(float a, float b, float c, float d, float e, float f, float isolevel, Tetrahedra t) {
         for (int i = 0; i < 4; i++) {
             Vector3f v = t.vertices[i];
             //System.out.println(v.x);
@@ -85,25 +68,6 @@ public class Surface {
         }
         
         drawTetrahedron(this, t.vertices, isolevel);
-        
-        
-//        for (int i = 0; i < 4; i++) {
-//            Vector3f v1 = t.vertices[i];
-            
-//            if (v1.value <= G) {
-//                for (int j = 0; j < 4 && j != i; j++) {
-//                    Vector3f v2 = t.vertices[j];
-//                    if (!v2.sinal) {
-//                        relevante = true;
-//                        Vertice v = new Vertice((v1.x + v2.x) / 2, (v1.y + v2.y) / 2, (v1.z + v2.z) / 2);
-//                        positions.add(new Vector4f(v.x, v.y, v.z, 1.0f));
-//                        colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
-//
-//                    }
-//                }
-//            }
-//        }
-        //return relevante;
     }
     
     private void drawTetrahedron(Surface surface, Vector3f[] v, float isolevel) {
@@ -124,13 +88,13 @@ public class Surface {
             // only vert 0 is inside
             case 0x01:
                 drawVert(surface, v[0], v[1], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[0], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[0], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -138,13 +102,13 @@ public class Surface {
             // only vert 1 is inside
             case 0x02:
                 drawVert(surface, v[1], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -152,13 +116,13 @@ public class Surface {
             // only vert 2 is inside
             case 0x04:
                 drawVert(surface, v[2], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[2], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[2], v[1], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -166,13 +130,13 @@ public class Surface {
             // only vert 3 is inside
             case 0x08:
                 drawVert(surface, v[3], v[1], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[3], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[3], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -180,24 +144,24 @@ public class Surface {
             // verts 0, 1 are inside
             case 0x03:
                 drawVert(surface, v[3], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[2], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 
                 drawVert(surface, v[2], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[2], v[1], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -205,24 +169,24 @@ public class Surface {
             // verts 0, 2 are inside
             case 0x05:
                 drawVert(surface, v[3], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
 
                 drawVert(surface, v[1], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[3], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[2], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -230,24 +194,24 @@ public class Surface {
             // verts 0, 3 are inside
             case 0x09:
                 drawVert(surface, v[0], v[1], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[0], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
 
                 drawVert(surface, v[1], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[3], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[0], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -255,24 +219,24 @@ public class Surface {
             // verts 1, 2 are inside
             case 0x06:
                 drawVert(surface, v[0], v[1], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[0], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
 
                 drawVert(surface, v[1], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[0], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[3], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -280,24 +244,24 @@ public class Surface {
             // verts 2, 3 are inside
             case 0x0C:
                 drawVert(surface, v[1], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[2], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[3], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
 
                 drawVert(surface, v[2], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[2], v[1], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -305,24 +269,24 @@ public class Surface {
             // verts 1, 3 are inside
             case 0x0A:
                 drawVert(surface, v[3], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
 
                 drawVert(surface, v[1], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[2], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[3], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -330,13 +294,13 @@ public class Surface {
             // verts 0, 1, 2 are inside
             case 0x07:
                 drawVert(surface, v[3], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[3], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[3], v[1], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -344,13 +308,13 @@ public class Surface {
             // verts 0, 1, 3 are inside
             case 0x0B:
                 drawVert(surface, v[2], v[1], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[2], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[2], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -358,13 +322,13 @@ public class Surface {
             // verts 0, 2, 3 are inside
             case 0x0D:
                 drawVert(surface, v[1], v[0], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[1], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -372,13 +336,13 @@ public class Surface {
             // verts 1, 2, 3 are inside
             case 0x0E:
                 drawVert(surface, v[0], v[1], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[0], v[2], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 drawVert(surface, v[0], v[3], isolevel);
-                colors.add(new Vector4f(1.0f, 0.0f, 0.0f, 1.0f));
+                colors.add(new Vector4f(0.0f, 0.0f, 1.0f, 1.0f));
                 countV++;
                 countF++;
                 break;
@@ -427,10 +391,11 @@ public class Surface {
             x = p1.x * oneMinusInterp + p2.x * interp;
             y = p1.y * oneMinusInterp + p2.y * interp;
             z = p1.z * oneMinusInterp + p2.z * interp;
+        }
             surface.positions.add(new Vector4f(x, y, z, 1));
             surface.nfaces++;
             surface.nverts++;
-        }
+        
     }
     
     public float calculatePoints(float x, float y, float z){

@@ -32,7 +32,16 @@ public class Projection {
     public Matrix4f perspective() {
         float angle = fovY / 2.0f * FastMath.DEG_TO_RAD;
         float cotangent = FastMath.cos(angle) / FastMath.sin(angle);
-
+        float top = zNear * (FastMath.sin(angle)/FastMath.cos(angle));
+        float bottom = -top;
+        float right = top * aspect;
+        float left = -right;
+        float m11 = (2 * zNear)/(right - left);
+        float m22 = (2 * zNear)/(top - bottom);
+        float m31 = (right + left)/(right - left);
+        float m32 = (top + bottom)/(top - bottom);  
+        float m33 = (-1) * ((zFar + zNear)/(zFar - zNear));
+        float m43 = ((-2) * (zFar * zNear))/(zFar - zNear);
         float e = cotangent / aspect; // focal length of the camera
 
         float fpn = zFar + zNear;  // far plus near
@@ -44,6 +53,7 @@ public class Projection {
         tempMatrix.m13 = 0.0f;  tempMatrix.m23 = 0.0f;       tempMatrix.m33 = -(fpn/fmn);  tempMatrix.m43 = -2.0f * zNear * zFar / fmn;
         tempMatrix.m14 = 0.0f;  tempMatrix.m24 = 0.0f;       tempMatrix.m34 = -1.0f;       tempMatrix.m44 = 0.0f;
 
+
         return tempMatrix;
     }
     
@@ -53,10 +63,6 @@ public class Projection {
         float fmn = zFar - zNear;  // far minus near
 
         Matrix4f tempMatrix = new Matrix4f();
-//        tempMatrix.m11 = 2 /(r-l);     tempMatrix.m21 = 0.0f;       tempMatrix.m31 = 0.0f;        tempMatrix.m41 = -(r + l) / (r - l); 
-//        tempMatrix.m12 = 0.0f;  tempMatrix.m22 = 2 / (t - b);  tempMatrix.m32 = 0.0f;        tempMatrix.m42 = -(t + b) / (t - b);
-//        tempMatrix.m13 = 0.0f;  tempMatrix.m23 = 0.0f;       tempMatrix.m33 = -2 / (fmn);  tempMatrix.m43 = -(fpn) / (fmn); 
-//        tempMatrix.m14 = 0.0f;  tempMatrix.m24 = 0.0f;       tempMatrix.m34 = -1.0f;       tempMatrix.m44 = 1f;
 
         tempMatrix.setToIdentity();
         tempMatrix.m33 = 0;
